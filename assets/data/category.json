@@ -1,0 +1,88 @@
+[
+    {
+        "id": "1",
+        "emoji": "🍿",
+        "name": "To Watch List",
+        "todos": [
+            {
+                "title": "Harry Potter",
+                "isFinished": false
+            },
+            {
+                "title": "Dune",
+                "isFinished": true
+            },
+            {
+                "title": "Memories of Geisha",
+                "isFinished": true
+            },
+            {
+                "title": "Harry Potter",
+                "isFinished": false
+            },
+            {
+                "title": "Dune",
+                "isFinished": true
+            },
+            {
+                "title": "Memories of Geisha",
+                "isFinished": true
+            },
+            {
+                "title": "Harry Potter",
+                "isFinished": false
+            },
+            {
+                "title": "Dune",
+                "isFinished": true
+            },
+            {
+                "title": "Memories of Geisha",
+                "isFinished": true
+            },
+            {
+                "title": "Harry Potter",
+                "isFinished": false
+            },
+            {
+                "title": "Dune",
+                "isFinished": true
+            },
+            {
+                "title": "Memories of Geisha",
+                "isFinished": true
+            },
+            {
+                "title": "Harry Potter",
+                "isFinished": false
+            },
+            {
+                "title": "Dune",
+                "isFinished": true
+            },
+            {
+                "title": "Memories of Geisha",
+                "isFinished": true
+            }
+        ]
+    },
+    {
+        "id": "2",
+        "emoji": "🌲",
+        "name": "Places to visit",
+        "todos": [
+            {
+                "title": "USA",
+                "isFinished": true
+            },
+            {
+                "title": "Austria",
+                "isFinished": false
+            },
+            {
+                "title": "Tatras",
+                "isFinished": false
+            }
+        ]
+    }
+]

@@ -1,70 +1,156 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { StyleSheet, View, FlatList, KeyboardAvoidingView } from "react-native";
+import { ThemedText } from "@/components/ThemedText";
+import category from "@/assets/data/category.json";
+import { Category } from "@/components/Category";
+import Button from "@/components/Button";
+import { InputModal } from "@/components/InputModal";
+import { useState } from "react";
+import CustomInput from "@/components/CustomInput";
+import { useForm } from "react-hook-form";
+import { ICategoryFormData } from "@/types";
+import { router } from "expo-router";
+import { ThemedView } from "@/components/ThemedView";
+import { BlurView } from "expo-blur";
 
 export default function HomeScreen() {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const { control, handleSubmit } = useForm<ICategoryFormData>();
+
+  const onModalClose = () => {
+    setIsModalVisible(false);
+  };
+  const onModalOpen = () => {
+    setIsModalVisible(true);
+  };
+
+  const createNewCategory = () => {};
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <View style={styles.container}>
+      <View style={styles.mainContainer}>
+        <FlatList
+          data={category}
+          columnWrapperStyle={{
+            justifyContent: "space-around",
+          }}
+          ListHeaderComponent={
+            <View style={styles.titleContainer}>
+              <ThemedText type="title">Welcome back</ThemedText>
+            </View>
+          }
+          numColumns={2}
+          renderItem={({ item }) => (
+            <Category
+              data={item}
+              onPress={() =>
+                router.push({
+                  pathname: `/${item.id}`,
+                  params: {
+                    emoji: item.emoji,
+                    name: item.name,
+                  },
+                })
+              }
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.flatListContent}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <BlurView intensity={50} style={styles.buttonWrapper}>
+          <Button
+            onPress={onModalOpen}
+            text="Add new category"
+            backgroundColor="#092CD9"
+            color="white"
+          />
+        </BlurView>
+      </View>
+
+      <InputModal onClose={onModalClose} isVisible={isModalVisible}>
+        <KeyboardAvoidingView style={styles.mainContainer}>
+          <ThemedText type="title">Add new category</ThemedText>
+          <View style={styles.formWrapper}>
+            <View style={styles.inputWrapper}>
+              <CustomInput
+                name="emoji"
+                placeholder="Write your emoji"
+                control={control}
+                rules={{
+                  minLength: {
+                    value: 1,
+                    message: "Minimum 1 character",
+                  },
+                  maxLength: {
+                    value: 2,
+                    message: "Maxium 2 characters",
+                  },
+                }}
+              />
+              <CustomInput
+                name="name"
+                placeholder="Write your name"
+                control={control}
+                rules={{
+                  minLength: {
+                    value: 4,
+                    message: "Minimum 4 characters",
+                  },
+                  maxLength: {
+                    value: 100,
+                    message: "Maxium 100 characters",
+                  },
+                }}
+              />
+            </View>
+            <Button
+              onPress={handleSubmit(createNewCategory)}
+              text="Add new category"
+              backgroundColor="#092CD9"
+              color="white"
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </InputModal>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+  mainContainer: {
+    padding: 15,
+    flex: 1,
+  },
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    paddingVertical: 15,
     gap: 8,
   },
   stepContainer: {
     gap: 8,
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
+  buttonWrapper: {
+    position: "absolute",
     bottom: 0,
+    paddingHorizontal: 15,
+    paddingTop: 10,
+    paddingBottom: 30,
     left: 0,
-    position: 'absolute',
+    right: 0,
+  },
+  formWrapper: {
+    gap: 30,
+  },
+  inputWrapper: {
+    paddingTop: 20,
+    gap: 20,
+  },
+  flatListContent: {
+    flexGrow: 1,
+    paddingBottom: 100,
   },
 });
